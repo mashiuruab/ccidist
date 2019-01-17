@@ -1,0 +1,110 @@
+#  -*-shell-script-*-
+
+# Common definitions for install and init file for the CCI Distribution
+# Service. If you are going to edit this file it is best to do so _before_ 
+# installing the CCIDist service.
+#
+
+
+# CCI Europe, 2013
+ccidistListeningPort=8080
+
+# CCIDist Script related configs
+scriptFile="install"                   				# the absolute, dereferenced path of this script file
+scriptDir=$(dirname "$0")
+
+serviceName="ccidist"                               		# service name
+serviceUser="ccidist"                                     	        # OS user name for the service
+serviceGroup="ccidist"                                    		# OS group name for the service
+
+# Timeouts for the init file:
+maxShutdownTime=180                                        	# maximum number of seconds to wait for the daemon to terminate normally
+maxStartupTime=180                                        	# maximum number of seconds to wait for the daemon to start properly
+
+
+# This is where every static asset lives
+ccidistDir="/opt/ccidist"
+# not quite sure about this one.
+ccidistSystemDir=$ccidistDir
+
+applDir="$ccidistDir" 
+
+serviceUserHome="$applDir" 								# location of ccidist dir
+
+# And this is where we place variable data according to FHS
+ccidistVarDir="/var/opt/ccidist"
+serviceLogDir="$ccidistVarDir/log"
+ccidistLogDir="$serviceLogDir"
+pidFile="$ccidistVarDir/$serviceName.pid"
+
+# We use a custom tmp directory.
+ccidistTmpDir="/var/tmp/ccidist"
+
+# the init script
+serviceScriptFile="$scriptDir/ccidistd"
+ccidistLibDir="$ccidistDir/lib"
+ccidistNativeLibDir="$ccidistDir/native"
+ccidistConfigDir="$ccidistDir/etc"
+ccidistSqlDir="$ccidistDir/database/sql"
+ccidistDbDriverDir="$ccidistDir/database/driver"
+ccidistWebappWARDir="$ccidistDir/webapps"
+
+# log files for StdOut/StdErr from JVM.
+serviceStdOutLog="$serviceLogDir/$serviceName-stdout.log"
+serviceStdErrLog="$serviceLogDir/$serviceName-stderr.log"
+
+ccidistShareDir="$ccidistDir/share"
+ccidistJarFile="$ccidistShareDir/ccidist.jar"       # location of ccidist.jar file
+
+# CCIDist configuration, logging and license files
+ccidistDefinitions="$ccidistDir/etc/defaults"    # common file to source.
+ccidistLoggingPropFile="$ccidistDir/etc/log4j.properties"
+
+initSrc="init-script"
+etcInitDFile="/etc/init.d/$serviceName" 
+
+DAEMON_OPTIONS=""
+
+# Detect system architecture
+if [ `uname -m` = "x86_64" ]; then
+    CCIDIST_ARCH="x86_64"
+else
+    echo "'uname -m' returned `uname -m`. Assuming x86."
+    CCIDIST_ARCH="x86"
+fi
+
+# Detect the Java runtime
+
+if [ "$CCIDIST_JAVA_HOME" = "" ] ; then
+    CCIDIST_JAVA_HOME="$JAVA_HOME"
+fi
+
+_JAVA_EXEC="java"
+if [ "$CCIDIST_JAVA_HOME" != "" ] ; then
+    _TMP="$CCIDIST_JAVA_HOME/bin/java"
+    if [ -f "$_TMP" ] ; then
+        if [ -x "$_TMP" ] ; then
+            _JAVA_EXEC="$_TMP"
+        else
+            echo "Warning: $_TMP is not executable"
+        fi
+    else
+        echo "Warning: $_TMP does not exist"
+    fi
+fi
+
+if ! which "$_JAVA_EXEC" >/dev/null ; then
+    echo "Error: No java environment found"
+    exit 1
+fi
+
+ccidistClassPath=$ccidistJarFile:$ccidistConfigDir
+for f in $ccidistLibDir/*.jar
+do
+    ccidistClassPath=$ccidistClassPath:$f
+done
+
+javaCommand="$_JAVA_EXEC"                                         	             	
+javaArgs="-server -Xms768m -Xmx768m -XX:MaxPermSize=128m -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled -Djava.awt.headless=true -DDEBUG=true -Djava.library.path=$ccidistNativeLibDir/$CCIDIST_ARCH -Dcom.ccidist.user=$serviceUser -Dcom.ccidist.group=$serviceGroup -Dcom.ccidist.port=$ccidistListeningPort -Dlog4j.configuration=file://$ccidistLoggingPropFile -Djavamelody.storage-directory=$ccidistVarDir/lib -Dorg.terracotta.quartz.skipUpdateCheck=true -Dcom.ccidist.dir=$ccidistDir -Djava.io.tmpdir=$ccidistTmpDir $DAEMON_OPTIONS -classpath $ccidistClassPath com.cefalo.cci.dist.CCIDistService"
+
+javaCommandLine="$javaCommand $javaArgs"                       	

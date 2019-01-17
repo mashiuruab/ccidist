@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <definition name="baseLayout" template="/WEB-INF/struts/layout/baseLayout.jsp">
+        <put-attribute name="header" value="/WEB-INF/struts/layout/header.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/struts/layout/sidebar.jsp" />
+        <put-attribute name="body" value="" />
+        <put-attribute name="footer" value="/WEB-INF/struts/layout/footer.jsp" />
+    </definition>
+    <definition name="publicationBaseLayout" template="/WEB-INF/struts/layout/baseLayout.jsp">
+        <put-attribute name="header" value="/WEB-INF/struts/layout/header.jsp" />
+        <put-attribute name="sidebar" value="/WEB-INF/struts/layout/publicationSidebar.jsp" />
+        <put-attribute name="body" value="" />
+        <put-attribute name="footer" value="/WEB-INF/struts/layout/footer.jsp" />
+    </definition>
+
+    <definition name="orgList.tiles" extends="baseLayout">
+        <put-attribute name="body" value="/WEB-INF/struts/views/orgList.jsp" />
+    </definition>
+
+    <definition name="orgEdit.tiles" extends="baseLayout">
+        <put-attribute name="body" value="/WEB-INF/struts/views/orgForm.jsp" />
+    </definition>
+
+    <definition name="publicationList.tiles" extends="baseLayout">
+        <put-attribute name="body" value="/WEB-INF/struts/views/publicationList.jsp" />
+    </definition>
+
+    <definition name="publicationEdit.tiles" extends="baseLayout">
+        <put-attribute name="body" value="/WEB-INF/struts/views/publicationForm.jsp" />
+    </definition>
+
+    <definition name="adminIssueList.tiles" extends="publicationBaseLayout">
+        <put-attribute name="body" value="/WEB-INF/struts/views/adminIssueList.jsp" />
+    </definition>
+
+    <definition name="error.tiles" extends="baseLayout">
+        <put-attribute name="body" value="/WEB-INF/struts/views/error.jsp" />
+    </definition>
+
+    <definition name="userList.tiles" extends="baseLayout">
+        <put-attribute name="body" value="/WEB-INF/struts/views/userList.jsp" />
+    </definition>
+
+    <definition name="userEdit.tiles" extends="baseLayout">
+        <put-attribute name="body" value="/WEB-INF/struts/views/userEdit.jsp" />
+    </definition>
+
+    <definition name="driverList.tiles" extends="publicationBaseLayout">
+        <put-attribute name="body" value="/WEB-INF/struts/views/driverList.jsp" />
+    </definition>
+
+    <definition name="driverEdit.tiles" extends="publicationBaseLayout">
+        <put-attribute name="body" value="/WEB-INF/struts/views/driverForm.jsp" />
+    </definition>
+
+    <definition name="ruleList.tiles" extends="publicationBaseLayout">
+        <put-attribute name="body" value="/WEB-INF/struts/views/ruleList.jsp" />
+    </definition>
+
+    <definition name="ruleForm.tiles" extends="publicationBaseLayout">
+        <put-attribute name="body" value="/WEB-INF/struts/views/ruleForm.jsp" />
+    </definition>
+</tiles-definitions>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ccidist-parent</artifactId>
+        <groupId>com.cefalo</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ccidist-model</artifactId>
+    <packaging>jar</packaging>
+
+    <name>CCI Distribution Service :: JPA Model Objects</name>
+    <description>Provides Model Object to use in Persistence Layer</description>
+    <url>http://www.cefalo.no/</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-utils</artifactId>
+        </dependency>
+
+        <!--hibernate dependencies-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

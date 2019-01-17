@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ccidist-parent</artifactId>
+        <groupId>com.cefalo</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ccidist-event</artifactId>
+
+    <name>CCI Distribution Service :: Varnish Event Services</name>
+    <description>Provides Service For Varnish Cache Invalidation</description>
+    <url>http://www.cefalo.com/</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-model</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-utils</artifactId>
+        </dependency>
+
+        <!--guice dependencies -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-servlet</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-persist</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

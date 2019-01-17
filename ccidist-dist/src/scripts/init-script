@@ -1,0 +1,256 @@
+#!/bin/bash 
+#
+# Init script for the CCI Distribution Service
+#
+# Partial Copyright, 2013 CCI Europe
+# http://www.ccieurope.com/
+#
+# chkconfig: 2345 90 10
+# Description: CCI Distribution Service
+# processname: java
+# pidfile: /var/opt/ccidist/ccidist.pid
+#
+### BEGIN INIT INFO
+# Provides:          ccidist
+# Required-Start:    $remote_fs $syslog $network 
+# Required-Stop:     $remote_fs $syslog $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: CCI Distribution Service
+# Description:       CCI Distribution Service
+### END INIT INFO
+
+
+# Source function library
+#set -o errexit
+
+# Include CCIDIST defaults. If you are going to change anything, do it in
+# this file:
+ 
+defaults="/opt/ccidist/etc/defaults"
+
+echo -n "Loading defaults from $defaults..."
+. $defaults || exit
+echo "ok"
+
+# below there be dragons. Change at your own risk.
+
+
+# Makes the file $1 writable by the group $serviceGroup.
+function makeFileWritable {
+   local filename="$1"
+   touch $filename || return 1
+   chown "$serviceUser.$serviceGroup" $filename || return 1
+   return 0; 
+}    
+
+# Returns 0 if the process with PID $1 is running.
+function checkProcessIsRunning {
+    local pid="$1"
+    kill -0 $pid 2> /dev/null
+    if [ $? = 0 ]; then
+	# Pid matches. We should check some more to see if this is our daemon:
+	checkProcessIsOurService $pid
+	if [ $? = 0 ]; then
+	    # All is well
+	    return 0
+	else
+	    # Pid matches but doesn't look right.
+	    return 1
+	fi
+    else 
+	return 1
+    fi
+}
+
+# Returns 0 if the process with PID $1 is our Java service process.
+function checkProcessIsOurService {
+   local pid="$1"
+   grep -q com.cefalo.cci /proc/$pid/cmdline
+   if [ "$?" -eq "0" ];then 
+       return 0
+   else
+       return 1
+   fi
+}
+
+# Returns 0 when the service is running and sets the variable $servicePid to the PID.
+function getServicePid {
+    if [ ! -f $pidFile ]; then 
+	# There is no pid file
+	return 1; 
+    fi
+    servicePid="$(<$pidFile)"
+    # there is a pid file. print the pid.
+    echo $servicePid 
+    return 0; 
+}
+
+function startServiceProcess {
+    local pid=$(getServicePid)
+
+    checkProcessIsRunning $pid
+    if [ "$?" -eq "0" ]; then
+	echo "$serviceName is already running as PID $pid. Please run $0 stop."
+	return 1
+    fi
+
+    rm -f $pidFile
+    
+    # Cleanup the temporary directory
+    rm -rf $ccidistTmpDir/*
+
+    # Move any old logs out of the way 
+    if [ -e "$serviceStdOutLog" ]; then
+	mv -f "$serviceStdOutLog" "$serviceStdOutLog.1"
+    fi
+    if [ -e "$serviceStdErrLog" ]; then
+	mv -f "$serviceStdErrLog" "$serviceStdErrLog.1"
+    fi
+
+
+    makeFileWritable $pidFile || return 1
+    makeFileWritable $serviceStdOutLog || return 1
+    makeFileWritable $serviceStdErrLog || return 1
+
+    #echo "Command line: $javaCommandLine"
+
+    cmd="setsid $javaCommandLine > $serviceStdOutLog 2>$serviceStdErrLog & echo \$! >$pidFile"
+
+    su -s "/bin/bash" -c "$cmd"
+
+    # sleep a bit to let it get on its way
+    sleep 1
+    servicePid="$(<$pidFile)"
+    # echo "Got pid $servicePid"
+
+    if checkProcessIsRunning $servicePid; then :; else
+       echo -ne "\n$serviceName start failed, see logfile.\n"
+       return 1
+    fi
+    # Waiting for the log file to look OK
+    echo -n "Waiting for $serviceName (pid: $servicePid) to start "
+    
+    for i in $(seq 1 $maxStartupTime);do
+	sleep 1
+	echo -n "$i "
+	grep -q "CCI Distribution Service is UP" $serviceStdErrLog
+	if [ "$?" -eq "0" ]; then 
+	    echo ""
+	    grep  "CCI Distribution Service is UP" $serviceStdErrLog
+	    return 0
+	fi
+    done
+    echo "$serviceName did not seem to start up properly. Tail of log file: "
+    tail -10 $serviceStdOutLog
+    return 1; 
+
+}
+
+function stopServiceProcess {
+
+    local pid=$(getServicePid) || return 1
+    checkProcessIsRunning $pid
+    # kill -0 $pid
+
+    if [ "$?" -ne "0" ]; then
+	echo "Stale pid file found. Clearing"
+	rm -f $pidFile
+	return 0
+    fi
+
+    kill $pid || return 1
+    echo -n "waiting "
+    for i in $(seq 1 $maxShutdownTime); do
+	echo -n "$i "
+	checkProcessIsRunning $pid
+	if [ $? -ne 0 ]; then
+	    echo "$serviceName ($pid) is gone. Removing pid file ($pidFile)"
+            rm -f $pidFile
+            return 0
+	fi
+	sleep 1
+    done
+    echo -n "$serviceName did not terminate, sending SIGKILL... "
+    kill -KILL $pid || return 1
+    sleep 2 
+    checkProcessIsRunning $servicePid
+    if [ "$?" -ne "0" ]; then
+	echo "$serviceName ($pid) is gone. Removing pid file ($pidFile)"
+	rm -f $pidFile
+	return 0
+    fi
+    sleep 1
+
+    echo "Error: $serviceName could not be stopped...."
+    return 1; 
+}
+
+function startService {
+    echo -n "Starting $serviceName   "
+    startServiceProcess
+    if [ "$?" -eq "0" ]; then 
+	echo "CCI Distribution Service successfully started."
+	return 0
+    else
+	echo "Starting CCI Distribution Service failed."
+	echo "Latest lines from log file $serviceStdOutLog follows:"
+	tail -n15 $serviceStdOutLog
+	return 1
+    fi
+}
+
+function stopService {
+    # get pid from file
+    local pid=$(getServicePid)
+    if [ "$pid" == "" ]; then
+	echo "No PID file found. Service not running?"
+	return 0
+    fi
+    echo "Stopping $serviceName (PID: $pid) "
+    stopServiceProcess $pid
+    if [ $? -ne 0 ]; then 
+	return 1
+    else
+	echo "CCI Distribution Service stopped."
+	return 0; 
+    fi  
+}
+
+function checkServiceStatus {
+    local pid
+    echo -n "Checking for $serviceName:   "  
+    local pid=$(getServicePid)
+    checkProcessIsRunning $pid
+    if [ $? -eq 0 ]; then
+	echo "CCI Distribution Service is running (PID $pid)"
+	return 0
+    else
+	echo "CCI Distribution Service is not running"
+	return 0
+    fi
+}
+
+
+function main {   
+   case "$1" in      
+      start)                                               # starts the Java program as a Linux service
+         startService
+         ;;
+      stop)                                                # stops the Java program service
+         stopService
+         ;;
+      restart)                                             # stops and restarts the service
+         stopService && startService
+         ;;
+      status)                                              # displays the service status
+         checkServiceStatus
+         ;;     
+      *)
+         echo "Usage: $0 {start|stop|restart|status}"
+         exit 1
+         ;;
+      esac
+    }
+
+main $1

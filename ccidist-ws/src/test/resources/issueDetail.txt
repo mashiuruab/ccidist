@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>Addressa widget-quiz-20121022 for ipad</title>
+</head>
+<body>
+    <dl class="issue">
+        <dt>Name: </dt>
+            <dd>Addressa</dd>
+        <dt>Issue: </dt>
+            <dd>widget-quiz-20121022</dd>
+        <dt>Date: </dt>
+            <dd>Wed Apr 03 17:18:00 BDT 2013</dd>
+        <dt>Title: </dt>
+            <dd>Addressa</dd>
+        <dt>Status: </dt>
+            <dd>published</dd>
+        <dt>epub: </dt>
+            <dd><a href="http://localhost:8080/cciService/polaris/addressa/issue/ipad/widget-quiz-20121022.epub">Epub</a></dd>
+        <dt>container: </dt>
+            <dd><a href="http://localhost:8080/cciService/polaris/addressa/issue/widget-quiz-20121022/META-INF/container.xml">Container</a></dd>
+        <dt>events: </dt>
+            <dd><a href="http://localhost:8080/cciService/polaris/addressa/issue/widget-quiz-20121022/events">Events</a></dd>
+    </dl>
+</body>
+</html>

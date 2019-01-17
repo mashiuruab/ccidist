@@ -1,0 +1,197 @@
+#!/bin/bash
+#
+# (C) 2013 CCI Europe
+# http://www.ccieurope.com/
+#
+
+# Comment this one out on debug:
+# set -x
+
+# Exit on error:
+
+basedir=$(dirname $0)
+defaults="$basedir/defaults"
+
+echo "Loading defaults from $defaults..."
+. "$defaults"
+
+function createUser {
+    # We first check for distribution with `lsb_release`
+    distid=$(lsb_release -si 2>/dev/null)
+
+    if [ "$distid" = "" ]
+    then
+        # We check for a distribution specific file.
+        if [ -f /etc/redhat-release ]
+        then
+            distid=RedHat
+        elif [ -f /etc/debian_version ]
+        then
+            distid=Debian
+        fi
+    fi
+
+    case $distid in
+        RedHat*|CentOS|Fedora)
+        # We need to check what RHEL-version this is based on:
+        # RHEL5:
+            groupadd -r $serviceGroup
+            useradd -r --home $ccidistDir -g $serviceGroup $serviceUser
+        # RHEL6 (not yet supported) should be something like this:
+            # groupadd --system $serviceGroup
+            # useradd --system --home $ccidistDir -g $serviceGroup $serviceUser
+            ;;
+        Debian|Ubuntu)
+            addgroup -q --system $serviceGroup
+            adduser -q --system --ingroup $serviceGroup --disabled-password --home $ccidistDir $serviceUser
+            ;;
+    *)
+            echo "Unknown distribution $distid, assuming RedHat-like"
+            groupadd --system $serviceGroup
+            useradd --system --home $ccidistDir -g $serviceGroup $serviceUser
+    esac
+}
+
+function createRequiredDirStructure {
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistDir";
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistSystemDir";
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistVarDir";
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistVarDir/lib";
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistShareDir";
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistLogDir";
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistLibDir";
+
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistNativeLibDir";
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistNativeLibDir/x86_64";
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistNativeLibDir/x86";
+
+
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistConfigDir";
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistSqlDir";
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistDbDriverDir";
+
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistTmpDir";
+    install -d --group=$serviceGroup --owner=$serviceUser "$ccidistWebappWARDir";
+}
+
+function copyNecessaryFiles {
+    echo -n "Copying files..."
+    local ccidistFile="$scriptDir/ccidist.jar"
+    local loggingPropFile="$scriptDir/config/logging.properties"
+
+    echo -n "."
+    install --group=$serviceGroup --owner=$serviceUser "$ccidistFile" "$ccidistJarFile"
+
+    # Remove all jar files under $ccidistLibDir. This will ensure that we don't have any stale jar files.
+    rm -f $ccidistLibDir/*.jar
+
+    # Now copy over the new jar files.
+    for i in $scriptDir/lib/*; do
+        echo -n "."
+        install --group=$serviceGroup --owner=$serviceUser "$i" "$ccidistLibDir"
+    done
+
+    install --group=$serviceGroup --owner=$serviceUser "$scriptDir/native/x86_64/libsetuid.so" "$ccidistNativeLibDir/x86_64"
+    install --group=$serviceGroup --owner=$serviceUser "$scriptDir/native/x86/libsetuid.so" "$ccidistNativeLibDir/x86"
+
+    for i in $scriptDir/webapps/*; do
+        echo -n "."
+        install --group=$serviceGroup --owner=$serviceUser "$i" "$ccidistWebappWARDir"
+    done
+
+    for i in $scriptDir/config/*; do
+        safeCopy "$i" "$ccidistConfigDir"
+    done
+
+    safeCopy "$scriptDir/defaults" "$ccidistConfigDir"
+
+    for i in $scriptDir/database/sql/*; do
+    echo -n "."
+        install --group=$serviceGroup --owner=$serviceUser "$i" "$ccidistSqlDir"
+    done
+
+    for i in $scriptDir/database/driver/*; do
+    echo -n "."
+        install --group=$serviceGroup --owner=$serviceUser "$i" "$ccidistDbDriverDir"
+    done
+
+    echo "... done"
+    return 0;
+}
+
+# This method will show a y/N prompt if the target file already exists.
+function safeCopy {
+    local sourceFilePath=$1
+    local destDirPath=$2
+
+    local targetFilePath=$destDirPath/`basename $sourceFilePath`
+    if [ -f "$targetFilePath" ]; then
+        echo "" # Just so that we get a new line before the prompt.
+        read -p "File $targetFilePath already exists. Overwrite (y/N)? " doOverwrite
+        if [ "$doOverwrite" == "y" ]; then
+            # User answered yes. Lets "overwrite"
+            install --group=$serviceGroup --owner=$serviceUser "$sourceFilePath" "$destDirPath"
+            echo -n "OverWritten."
+        else
+            echo -n "Skipped."
+        fi
+    else
+        # File does not exist. Just copy it over.
+        install --group=$serviceGroup --owner=$serviceUser "$sourceFilePath" "$destDirPath"
+        echo -n "."
+    fi
+}
+
+function printGuide {
+    echo "The CCI Distribution Service is installed"
+    echo "You can start it by running: /etc/init.d/$serviceName start"
+    echo "Remember to configure automatic startup if you need/want it."
+    echo
+    echo "If you have any questions please send them to support@ccieurope.com"
+    echo "Have a nice day!"
+
+}
+
+function installService {
+    install -m 0755 $initSrc "/etc/init.d/$serviceName"
+    return 0;
+}
+
+function uninstallService {
+    echo "This will delete all files in $ccidistDir and $ccidistVarDir in addition to the init script"
+    echo -n "Please press ^C if you don't want to do this. Deletion will commence in "
+    for i in 9 8 7 6 5 4 3 2 1 0; do
+    sleep 1
+    echo -n "$i "
+    done
+    echo
+    echo "deleting..."
+    rm -rf $ccidistDir
+    rm -rf $ccidistVarDir
+    rm -rf $etcInitDFile
+    rm -rf $ccidistTmpDir
+
+    echo $serviceName uninstalled. Have a nice day.
+    return 0;
+}
+
+function main {
+    case "$1" in
+        install)
+            createUser
+            createRequiredDirStructure
+            copyNecessaryFiles
+            installService
+            printGuide
+            ;;
+        uninstall)
+            uninstallService
+            ;;
+        *)
+            echo "Usage: $0 {install|uninstall}"
+            exit 1
+            ;;
+    esac
+}
+
+main $1

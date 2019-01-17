@@ -1,0 +1,43 @@
+<atom:feed total="267" xmlns:atom="http://www.w3.org/2005/Atom">
+    <atom:title>Adressa Issues</atom:title>
+    <atom:link rel="self"
+               href="/polaris/adressa?device-type=iPad&amp;from=2012-11-01&amp;sortOrder=dev&amp;limit=10&amp;start=20"/>
+    <atom:link rel="prev"
+               href="/polaris/adressa?device-type=iPad&amp;from=2012-11-01&amp;sortOrder=dev&amp;limit=10&amp;start=10"/>
+    <atom:link rel="next"
+               href="/polaris/adressa?device-type=iPad&amp;from=2012-11-01&amp;sortOrder=dev&amp;limit=10&amp;start=30"/>
+    <atom:link rel="next2"
+               href="/polaris/adressa?device-type=iPad&amp;from=2012-11-01&amp;sortOrder=dev&amp;limit=10&amp;start=30"/>
+    <atom:updated>2012-10-13T18:30:02Z</atom:updated>
+    <atom:author>
+        <atom:name>Adressa</atom:name>
+    </atom:author>
+    <atom:id>urn:uuid:5f49aa74-e920-425d-a150-8907494905f6</atom:id>
+    <atom:entry>
+        <atom:id>urn:0-9767736-6-X</atom:id>
+        <atom:title>Sunny Summer Ahead!</atom:title>
+        <atom:link href="http://polaris/adressa/ipad/2012-235" rel="alternate"/>
+        <atom:author>
+            <atom:name>Adressa</atom:name>
+        </atom:author>
+        <atom:updated>2012-10-14T18:30:02Z</atom:updated>
+    </atom:entry>
+    <atom:entry>
+        <atom:id>urn:0-9767736-9-X</atom:id>
+        <atom:title>Norway Wins, but Denmark Has Other Victory</atom:title>
+        <atom:link href="polaris/adressa/ipad/2012-234" rel="alternate"/>
+        <atom:author>
+            <atom:name>Adressa</atom:name>
+        </atom:author>
+        <atom:updated>2010-12-13T18:30:02Z</atom:updated>
+    </atom:entry>
+    <atom:entry>
+        <atom:id>urn:0-9767736-9-X</atom:id>
+        <atom:title>Norway Wins, but Denmark Has Other Victory</atom:title>
+        <atom:link href="polaris/adressa/ipad/2012-234" rel="alternate"/>
+        <atom:author>
+            <atom:name>Adressa</atom:name>
+        </atom:author>
+        <atom:updated>2010-12-13T18:30:02Z</atom:updated>
+    </atom:entry>
+</atom:feed>

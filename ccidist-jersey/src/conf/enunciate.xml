@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<enunciate label="ccidist"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://enunciate.codehaus.org/schemas/enunciate-1.26.xsd">
+  <!--api-import pattern="com.cefalo.cci.restResource.package-info" /-->
+  <namespaces>
+    <!-- namespace id="api" uri="http://api.example.com/"/-->
+  </namespaces>
+
+  <api-classes>
+    <exclude pattern="com.cefalo.cci.restResource.RedirectOrgListResource"/>
+  </api-classes>
+
+  <modules>
+    <jersey  disabled="true"/>
+    <docs splashPackage="com.cefalo.cci.restResource" title="CCI Distribution Service" copyright="CCI Europe">
+        <additional-css file="custom.css"/>
+        <!--download name="License" file="LICENSE.txt" description="The license file governing the use of this API."/-->
+    </docs>
+  </modules>
+</enunciate>

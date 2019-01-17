@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ccidist-parent</artifactId>
+        <groupId>com.cefalo</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ccidist-jersey</artifactId>
+
+    <name>CCI Distribution Service :: Jersey REST Resources</name>
+    <description>Provides Functionality For Restful Webservice</description>
+    <url>http://www.cefalo.no/</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+
+        <!--jersy dependencies -->
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-guice</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-multipart</artifactId>
+        </dependency>
+
+        <!--guice dependencies -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-servlet</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-persist</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.bull.javamelody</groupId>
+            <artifactId>javamelody-core</artifactId>
+        </dependency>
+
+        <!--apache shiro dependencies -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-guice</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.enunciate</groupId>
+            <artifactId>enunciate-core-annotations</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.enunciate</groupId>
+                <artifactId>maven-enunciate-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>docs</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <docsDir>${project.build.directory}/apiDocs/api</docsDir>
+                            <configFile>src/conf/enunciate.xml</configFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

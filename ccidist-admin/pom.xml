@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ccidist-parent</artifactId>
+        <groupId>com.cefalo</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ccidist-admin</artifactId>
+    <packaging>war</packaging>
+
+    <name>CCI Distribution Service :: Admin Webapp</name>
+    <description>Provides Functionality For Admin Webapp</description>
+    <url>http://www.cefalo.no/</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-jersey</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-persistence</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.sonatype.sisu</groupId>
+            <artifactId>sisu-guice</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.sonatype.sisu.inject</groupId>
+            <artifactId>guice-multibindings</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.sonatype.sisu.inject</groupId>
+            <artifactId>guice-struts2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.sonatype.sisu.inject</groupId>
+            <artifactId>guice-persist</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+
+        <!--jersy dependencies -->
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-guice</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-multipart</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+        </dependency>
+
+        <!--tiles integration -->
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-tiles-plugin</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jgeppert.struts2.bootstrap</groupId>
+            <artifactId>struts2-bootstrap-plugin</artifactId>
+        </dependency>
+
+        <!-- DB driver dependency -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>../ccidist-jersey/target/apiDocs/api</directory>
+                            <targetPath>api</targetPath>
+                        </resource>
+                        <resource>
+                            <directory>../ccidist-dist/src/config/</directory>
+                            <targetPath>WEB-INF/classes</targetPath>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <configuration>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>log4j.configuration</name>
+                            <value>file:///${project.basedir}/../ccidist-dist/src/development/log4j_dev.properties
+                            </value>
+                        </systemProperty>
+                    </systemProperties>
+
+                    <stopPort>9000</stopPort>
+                    <stopKey>stopJetty</stopKey>
+
+                    <webApp>
+                        <contextPath>/admin</contextPath>
+                        <extraClasspath>${project.basedir}/../ccidist-dist/src/config/</extraClasspath>
+                        <baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
+                            <resourcesAsCSV>src/main/webapp,../ccidist-jersey/target/apiDocs/</resourcesAsCSV>
+                        </baseResource>
+                    </webApp>
+
+                    <contextHandlers>
+                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
+                            <war>${project.basedir}/../ccidist-dist/src/digitaldriver/ccidist-digitaldriver.war</war>
+                            <contextPath>/ccidist-digitaldriver</contextPath>
+                        </contextHandler>
+                    </contextHandlers>
+
+                    <requestLog implementation="org.eclipse.jetty.server.NCSARequestLog">
+                        <filename>${project.build.directory}/yyyy_mm_dd.request.log</filename>
+                        <retainDays>90</retainDays>
+                        <append>true</append>
+                        <extended>true</extended>
+                        <logTimeZone>GMT</logTimeZone>
+                    </requestLog>
+                    <useProvidedScope>true</useProvidedScope>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,153 @@
+<ehcache>
+    <!--need to change configuration-->
+    <defaultCache eternal="true" overflowToDisk="false"/>
+    
+    <cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.jgroups.JGroupsCacheManagerPeerProviderFactory" 
+            properties="connect=TCP(bind_port=7800;bind_addr=localhost)
+                        :TCPPING(initial_hosts=localhost[7800]:localhost[7800];port_range=10;timeout=3000;num_initial_members=2)
+                        :VERIFY_SUSPECT(bind_addr=localhost;timeout=1500)
+                        :pbcast.NAKACK(retransmit_timeout=3000;use_mcast_xmit=false)
+                        :pbcast.GMS(join_timeout=5000;print_local_addr=false)"/>
+
+    <cache  name="com.cefalo.cci.model.Organization"
+            maxElementsInMemory="50"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="1800">
+        <cacheEventListenerFactory
+                class="net.sf.ehcache.distribution.jgroups.JGroupsCacheReplicatorFactory"
+                properties="replicateAsynchronously=false, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true" />
+        <cacheEventListenerFactory class="com.cefalo.cci.dao.LoggingCacheListenerFactory"/>
+    </cache>
+    
+    <cache  name="com.cefalo.cci.model.Events"
+            maxElementsInMemory="2000"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="1800">
+        <cacheEventListenerFactory
+            class="net.sf.ehcache.distribution.jgroups.JGroupsCacheReplicatorFactory"
+            properties="replicateAsynchronously=false, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true" />
+        <cacheEventListenerFactory class="com.cefalo.cci.dao.LoggingCacheListenerFactory"/>
+    </cache>
+    
+    <cache  name="com.cefalo.cci.model.Publication"
+            maxElementsInMemory="200"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="1800">
+        <cacheEventListenerFactory
+            class="net.sf.ehcache.distribution.jgroups.JGroupsCacheReplicatorFactory"
+            properties="replicateAsynchronously=false, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true" />
+        <cacheEventListenerFactory class="com.cefalo.cci.dao.LoggingCacheListenerFactory"/>
+    </cache>
+            
+    <cache  name="com.cefalo.cci.model.Issue"
+            maxElementsInMemory="500"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="1800">
+        <cacheEventListenerFactory
+            class="net.sf.ehcache.distribution.jgroups.JGroupsCacheReplicatorFactory"
+            properties="replicateAsynchronously=false, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true" />
+        <cacheEventListenerFactory class="com.cefalo.cci.dao.LoggingCacheListenerFactory"/>
+    </cache>
+    
+    <cache  name="com.cefalo.cci.model.RxmlZipFile"
+            maxElementsInMemory="500"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="1800">
+        <cacheEventListenerFactory
+            class="net.sf.ehcache.distribution.jgroups.JGroupsCacheReplicatorFactory"
+            properties="replicateAsynchronously=false, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true" />
+        <cacheEventListenerFactory class="com.cefalo.cci.dao.LoggingCacheListenerFactory"/>
+    </cache>
+
+    <cache  name="com.cefalo.cci.model.DriverInfo"
+            maxElementsInMemory="1000"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="18000">
+        <cacheEventListenerFactory
+            class="net.sf.ehcache.distribution.jgroups.JGroupsCacheReplicatorFactory"
+            properties="replicateAsynchronously=false, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true" />
+        <cacheEventListenerFactory class="com.cefalo.cci.dao.LoggingCacheListenerFactory"/>
+    </cache>
+
+    <cache  name="com.cefalo.cci.model.DesignToEpubMapper"
+            maxElementsInMemory="1000"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="18000">
+        <cacheEventListenerFactory
+                class="net.sf.ehcache.distribution.jgroups.JGroupsCacheReplicatorFactory"
+                properties="replicateAsynchronously=false, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true" />
+        <cacheEventListenerFactory class="com.cefalo.cci.dao.LoggingCacheListenerFactory"/>
+    </cache>
+
+    <cache  name="com.cefalo.cci.model.MatchingRules"
+            maxElementsInMemory="1000"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="18000">
+        <cacheEventListenerFactory
+                class="net.sf.ehcache.distribution.jgroups.JGroupsCacheReplicatorFactory"
+                properties="replicateAsynchronously=false, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true" />
+        <cacheEventListenerFactory class="com.cefalo.cci.dao.LoggingCacheListenerFactory"/>
+    </cache>
+
+    <!-- The following are related to user information. This is only used from the "admin" webapp. So, we don't need cache 
+        replication for these regions. -->
+    <cache  name="com.cefalo.cci.model.Role"
+            maxElementsInMemory="100"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="1800"/>
+    
+    <!-- No need for cache replication here. -->
+    <cache  name="com.cefalo.cci.model.UserPrivilege"
+            maxElementsInMemory="100"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="1800"/>
+            
+    <!-- No need for cache replication here. -->
+    <cache  name="com.cefalo.cci.model.Users"
+            maxElementsInMemory="50"
+            eternal="false"
+            overflowToDisk="false"
+            timeToLiveSeconds="1800"/>
+
+    <!--
+        NOTE: configuration for query cache:
+        Here customized query cache regions are defined by adding region name in createQuery of
+        entityManger to gain full control of those cache regions. If we don't mention region
+        name in create query than Ehcache by default use org.hibernate.cache.StandardQueryCache.
+    -->
+    
+    <!-- The UpdateTimestampsCache holds one entry for each table. So, we don't need much here. Plus we should be able to 
+        store everything all the time. So, the cache size has to be sufficient. -->
+    <cache 
+            name="org.hibernate.cache.spi.UpdateTimestampsCache" 
+            maxElementsInMemory="100"
+            eternal="true"
+            overflowToDisk="false">
+        <cacheEventListenerFactory
+                class="net.sf.ehcache.distribution.jgroups.JGroupsCacheReplicatorFactory"
+                properties="replicateAsynchronously=false, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true" />
+        <cacheEventListenerFactory class="com.cefalo.cci.dao.LoggingCacheListenerFactory"/>
+    </cache> 
+
+    <cache  name="org.hibernate.cache.internal.StandardQueryCache" 
+            maxElementsInMemory="1000"
+            eternal="false" 
+            timeToLiveSeconds="1800"
+            overflowToDisk="false">
+        <cacheEventListenerFactory
+                class="net.sf.ehcache.distribution.jgroups.JGroupsCacheReplicatorFactory"
+                properties="replicateAsynchronously=false, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true" />
+        <cacheEventListenerFactory class="com.cefalo.cci.dao.LoggingCacheListenerFactory"/>    
+    </cache>
+
+</ehcache>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ccidist-parent</artifactId>
+        <groupId>com.cefalo</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ccidist-service</artifactId>
+    <packaging>jar</packaging>
+
+    <name>CCI Distribution Service :: Application Services</name>
+    <description>Provides Service Functionality</description>
+    <url>http://www.cefalo.no/</url>
+
+    <dependencies>
+        <!-- Internal Dependencies -->
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-model</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-persistence</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-storage</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cefalo</groupId>
+            <artifactId>ccidist-event</artifactId>
+        </dependency>
+
+        <!-- Atom feed -->
+        <dependency>
+            <groupId>rome</groupId>
+            <artifactId>rome</artifactId>
+        </dependency>
+
+        <!-- Google Guice related -->
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-servlet</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-persist</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.99soft.guice</groupId>
+            <artifactId>guartz</artifactId>
+        </dependency>
+
+        <!-- Apache jersey -->
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+        </dependency>
+
+        <!-- Servlet -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+
+        <!-- Apache Shiro -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.bull.javamelody</groupId>
+            <artifactId>javamelody-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+
+    </dependencies>
+</project>

@@ -1,0 +1,102 @@
+<assembly>
+    <id>distribution</id>
+    <baseDirectory>dist</baseDirectory>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+
+    <dependencySets>
+        <dependencySet>
+            <excludes>
+                <exclude>com.cefalo:*</exclude>
+                <!-- The following are common dependency for everything. But since we are going for "self-contained" war 
+                    files, we should not include them here. Also, if slf4j is included here, the log file becomes owned by "root" user which 
+                    plain old "SUCKS" :-( -->
+                <exclude>org.slf4j:*</exclude>
+                <exclude>log4j:log4j</exclude>
+                <exclude>com.google.guava:guava</exclude>
+            </excludes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>lib</outputDirectory>
+        </dependencySet>
+
+        <dependencySet>
+            <includes>
+                <include>com.cefalo:*</include>
+            </includes>
+            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>webapps</outputDirectory>
+            <scope>provided</scope>
+        </dependencySet>
+
+        <dependencySet>
+            <includes>
+                <include>com.cefalo:ccidist-dist</include>
+            </includes>
+            <outputFileNameMapping>ccidist.jar</outputFileNameMapping>
+            <useProjectArtifact>true</useProjectArtifact>
+            <outputDirectory>/</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+
+    <fileSets>
+        <fileSet>
+            <directory>src/database/sql/</directory>
+            <outputDirectory>database/sql/</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>src/database/driver/</directory>
+            <outputDirectory>database/driver/</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>src/database/driver/</directory>
+            <outputDirectory>database/driver/</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>src/digitaldriver/</directory>
+            <outputDirectory>webapps/</outputDirectory>
+        </fileSet>
+        
+        <fileSet>
+            <directory>src/config/</directory>
+            <outputDirectory>config/</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>src/native/</directory>
+            <outputDirectory>native/</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>src/scripts/</directory>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>${basedir}/../ccidist-jersey/target/apiDocs/api</directory>
+            <outputDirectory>api/</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>src/readme/weblogic</directory>
+            <outputDirectory>webapps/</outputDirectory>
+            <includes>
+                <include>**</include>
+            </includes>
+        </fileSet>
+        <!-- Let's copy the LGPL library sources in the distribution. -->
+        <fileSet>
+            <directory>${project.build.directory}/lgpl_sources</directory>
+            <outputDirectory>sources</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>src/sources</directory>
+            <outputDirectory>sources</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <constant name="struts.devMode" value="false"/>
+    <constant name="struts.custom.i18n.resources" value="message"/>
+    <constant name="struts.ui.theme" value="bootstrap" />
+
+    <package name="admin" extends="struts-default">
+
+        <result-types>
+            <result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult"/>
+        </result-types>
+
+        <interceptors>
+            <interceptor name="monitoring" class="net.bull.javamelody.StrutsInterceptor"/>
+
+            <interceptor-stack name="appDefaultStack">
+                <interceptor-ref name="defaultStack">
+                    <param name="exception.logEnabled">true</param>
+                    <param name="exception.logLevel">ERROR</param>
+                </interceptor-ref>
+                <interceptor-ref name="conversionError"/>
+                <!--java melody monitoring -->
+                <interceptor-ref name="monitoring"/>
+            </interceptor-stack>
+        </interceptors>
+
+        <default-interceptor-ref name="appDefaultStack"/>
+
+        <global-results>
+            <result name="error" type="tiles">error.tiles</result>
+            <result name="authException" type="httpheader">
+                <param name="error">401</param>
+            </result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="error"/>
+            
+            <exception-mapping exception="org.apache.shiro.authz.AuthorizationException" result="authException"/>
+            <exception-mapping exception="org.apache.shiro.authc.AuthenticationException" result="authException"/>
+        </global-exception-mappings>
+
+
+        <action name="monitor" class="com.cefalo.cci.action.admin.MonitorAction" method="changeStatus">
+            <result name="redirect" type="redirect">
+                <param name="location">${redirectURL}</param>
+            </result>
+        </action>
+
+        <action name="orgList" class="com.cefalo.cci.action.OrganizationListAction">
+            <result name="success" type="tiles">orgList.tiles</result>
+        </action>
+
+        <action name="orgEdit" class="com.cefalo.cci.action.admin.OrganizationAction" method="populateOrganization">
+            <result name="done" type="tiles">orgEdit.tiles</result>
+            <result name="input" type="tiles">orgEdit.tiles</result>
+            <result name="redirect" type="redirect">orgList.action</result>
+        </action>
+
+        <action name="orgDelete" class="com.cefalo.cci.action.admin.OrganizationDeleteAction" method="deleteOrganization">
+            <result name="deleted" type="redirectAction">
+                <param name="actionName">orgList.action</param>
+                <param name="parse">true</param>
+            </result>
+        </action>
+
+        <action name="publicationList" class="com.cefalo.cci.action.PublicationListAction" method="loadPublicationList">
+            <result name="done" type="tiles">publicationList.tiles</result>
+            <result name="input" type="tiles">publicationList.tiles</result>
+        </action>
+
+        <action name="backToOrgList" class="com.cefalo.cci.action.PublicationAction">
+            <result name="input" type="tiles">orgList.tiles</result>
+            <result type="redirect">orgList.action</result>
+        </action>
+
+        <action name="publicationEdit" class="com.cefalo.cci.action.PublicationAction" method="privilegeChecking">
+            <result name="done" type="tiles">publicationEdit.tiles</result>
+            <result name="input" type="tiles">publicationEdit.tiles</result>
+            <result name="redirect" type="redirectAction">
+                <param name="actionName">publicationList.action</param>
+                <param name="parse">true</param>
+                <param name="organizationId">${organizationId}</param>
+            </result>
+        </action>
+
+        <action name="publicationDelete" class="com.cefalo.cci.action.PublicationDeleteAction" method="deletePublication">
+            <result name="input" type="tiles">publicationList.tiles</result>
+            <result name="deleted" type="redirectAction">
+                <param name="actionName">publicationList.action</param>
+                <param name="parse">true</param>
+                <param name="organizationId">${organizationId}</param>
+            </result>
+        </action>
+
+        <action name="issueList" class="com.cefalo.cci.action.IssueAction" method="checkPrivilege">
+            <result name="done" type="tiles">adminIssueList.tiles</result>
+            <result name="redirect" type="redirectAction">
+                <param name="actionName">issueList.action</param>
+                <param name="parse">true</param>
+                <param name="publicationId">${publicationId}</param>
+            </result>
+            <result name="redirectIssueList" type="redirectAction">
+                <param name="actionName">issueList.action</param>
+                <param name="parse">true</param>
+                <param name="publicationId">${publicationId}</param>
+                <param name="start">${start}</param>
+                <param name="limit">${limit}</param>
+                <param name="issueStatus">${issueStatus}</param>
+                <param name="deviceType">${deviceType}</param>
+                <param name="toDate">${startDate}</param>
+            </result>
+        </action>
+
+        <!-- User related actions. -->
+        <action name="userList" class="com.cefalo.cci.action.admin.UserListAction" method="loadUserList">
+            <result name="done" type="tiles">userList.tiles</result>
+        </action>
+
+        <action name="userEdit" class="com.cefalo.cci.action.UserAction" method="populateBeans">
+            <result name="done" type="tiles">userEdit.tiles</result>
+            <result name="userList" type="redirectAction">
+                <!-- This is for the admin user -->
+                <param name="actionName">userList.action</param>
+            </result>
+            <result name="orgList" type="redirectAction">
+                <!-- This is for non-admin users. -->
+                <param name="actionName">orgList.action</param>
+            </result>
+            <result name="input" type="tiles">userEdit.tiles</result>
+        </action>
+
+        <action name="userDelete" class="com.cefalo.cci.action.admin.UserDeleteAction" method="deleteUser">
+            <result name="deleted" type="redirectAction">
+                <param name="actionName">userList.action</param>
+            </result>
+        </action>
+
+        <action name="driverList" class="com.cefalo.cci.action.DriverRuleListAction" method="loadDriverInfoList">
+            <result name="input" type="tiles">driverList.tiles</result>
+            <result name="done" type="tiles">driverList.tiles</result>
+        </action>
+
+        <action name="driverEdit" class="com.cefalo.cci.action.DriverRuleAction" method="onLoad">
+            <result name="loaded" type="tiles">driverEdit.tiles</result>
+            <result name="input" type="tiles">driverEdit.tiles</result>
+            <result name="redirect" type="redirectAction">
+                <param name="actionName">driverList.action</param>
+                <param name="parse">true</param>
+                <param name="publicationId">${publicationId}</param>
+            </result>
+        </action>
+
+        <action name="driverDelete" class="com.cefalo.cci.action.DriverRuleDeleteAction" method="deleteDriver">
+            <result name="input" type="tiles">driverList.tiles</result>
+            <result name="deleted" type="redirectAction">
+                <param name="actionName">driverList.action</param>
+                <param name="parse">true</param>
+                <param name="publicationId">${publicationId}</param>
+                <param name="redirectMessage">${redirectMessage}</param>
+            </result>
+        </action>
+
+        <action name="rules" class="com.cefalo.cci.action.MatchingRuleListAction" method="loadMatchingList">
+            <result name="input" type="tiles">ruleList.tiles</result>
+            <result name="listLoaded" type="tiles">ruleList.tiles</result>
+        </action>
+
+        <action name="rulesForm" class="com.cefalo.cci.action.MatchingRulesAction" method="onLoad">
+            <result name="input" type="tiles">ruleForm.tiles</result>
+            <result name="loaded" type="tiles">ruleForm.tiles</result>
+            <result name="saved" type="redirectAction">
+                <param name="actionName">rules.action</param>
+                <param name="parse">true</param>
+                <param name="publicationId">${publicationId}</param>
+            </result>
+        </action>
+
+        <action name="rulesDelete" class="com.cefalo.cci.action.MatchingRulesDeleteAction" method="deleteRules">
+            <result name="input" type="tiles">ruleList.tiles</result>
+            <result name="deleted" type="redirectAction">
+                <param name="actionName">rules.action</param>
+                <param name="parse">true</param>
+                <param name="publicationId">${publicationId}</param>
+            </result>
+        </action>
+
+    </package>
+</struts>

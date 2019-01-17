@@ -1,0 +1,714 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:Xlint="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.cefalo</groupId>
+    <artifactId>ccidist-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>0.1-SNAPSHOT</version>
+
+    <name>CCI Distribution Service :: Parent POM project</name>
+    <description>CCI Distribution Service root project</description>
+    <url>http://www.cefalo.no/</url>
+
+    <organization>
+        <name>CCI</name>
+        <url>http://www.ccieurope.com/</url>
+    </organization>
+
+    <issueManagement>
+        <system>jira</system>
+        <url>http://jira.cefalo.com.bd/browse/CCIDIST</url>
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <id>cefalo-partha</id>
+            <name>Partha Guha Roy</name>
+            <email>partha@cefalo.no</email>
+        </developer>
+        <developer>
+            <id>cefalo-nadim</id>
+            <name>Nadim Sumon</name>
+            <email>nadim.sumon@​cefalo.​no</email>
+        </developer>
+        <developer>
+            <id>cefalo-mashiur</id>
+            <name>Mashiur Rahman</name>
+            <email>mashiur@cefalo.no</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <tag>HEAD</tag>
+        <connection>scm:git:https://github.com/Cefalo/ccidist</connection>
+        <developerConnection>scm:git:https://github.com/Cefalo/ccidist.git</developerConnection>
+        <url>scm:git:https://github.com/Cefalo/ccidist</url>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- The reusable dependency versions should go here. If we have a single dependency on something, we can use it 
+            directly. -->
+        <apache.jersey.version>1.17.1</apache.jersey.version>
+        <apache.shiro.version>1.2.2</apache.shiro.version>
+        <google.guice.version>3.0</google.guice.version>
+        <sisu.guice.version>3.1.8</sisu.guice.version>
+        <slf4j.version>1.7.5</slf4j.version>
+        <hibernate.version>4.2.7.SP1</hibernate.version>
+        <apache.struts2.version>2.3.15</apache.struts2.version>
+        <jetty.version>8.1.14.v20131031</jetty.version>
+        <enunciate.version>1.27</enunciate.version>
+    </properties>
+
+    <modules>
+        <module>ccidist-utils</module>
+        <module>ccidist-model</module>
+        <module>ccidist-storage</module>
+        <module>ccidist-persistence</module>
+        <module>ccidist-service</module>
+        <module>ccidist-jersey</module>
+        <module>ccidist-ws</module>
+        <module>ccidist-admin</module>
+        <module>ccidist-dist</module>
+        <module>ccidist-config</module>
+        <module>ccidist-security</module>
+        <module>ccidist-event</module>
+    </modules>
+
+    <!-- Common dependencies. We'll use these dependencies in all modules. -->
+    <dependencies>
+        <!-- SLF4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- Google Guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <!-- JUnit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Internal module dependencies -->
+            <dependency>
+                <groupId>com.cefalo</groupId>
+                <artifactId>ccidist-ws</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.cefalo</groupId>
+                <artifactId>ccidist-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.cefalo</groupId>
+                <artifactId>ccidist-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.cefalo</groupId>
+                <artifactId>ccidist-persistence</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.cefalo</groupId>
+                <artifactId>ccidist-storage</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.cefalo</groupId>
+                <artifactId>ccidist-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.cefalo</groupId>
+                <artifactId>ccidist-utils</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.cefalo</groupId>
+                <artifactId>ccidist-jersey</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.cefalo</groupId>
+                <artifactId>ccidist-config</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.cefalo</groupId>
+                <artifactId>ccidist-event</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <!-- Servlet related dependencies -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>3.0.1</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet.jsp</groupId>
+                <artifactId>javax.servlet.jsp-api</artifactId>
+                <version>2.2.1</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>1.2</version>
+            </dependency>
+
+            <!-- Apache Jersey dependencies -->
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-server</artifactId>
+                <version>${apache.jersey.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-core</artifactId>
+                <version>${apache.jersey.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey.contribs</groupId>
+                <artifactId>jersey-guice</artifactId>
+                <version>${apache.jersey.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey.contribs</groupId>
+                <artifactId>jersey-multipart</artifactId>
+                <version>${apache.jersey.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-json</artifactId>
+                <version>${apache.jersey.version}</version>
+            </dependency>
+
+
+            <!-- Guice dependencies -->
+            <dependency>
+                <groupId>org.sonatype.sisu</groupId>
+                <artifactId>sisu-guice</artifactId>
+                <version>${sisu.guice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.inject</groupId>
+                <artifactId>guice</artifactId>
+                <version>${google.guice.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.sonatype.sisu.inject</groupId>
+                <artifactId>guice-multibindings</artifactId>
+                <version>${sisu.guice.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-multibindings</artifactId>
+                <version>${google.guice.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.sonatype.sisu.inject</groupId>
+                <artifactId>guice-servlet</artifactId>
+                <version>${sisu.guice.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-servlet</artifactId>
+                <version>${google.guice.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.sonatype.sisu.inject</groupId>
+                <artifactId>guice-persist</artifactId>
+                <version>${sisu.guice.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-persist</artifactId>
+                <version>${google.guice.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Hibernate dependencies -->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-entitymanager</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+
+            <!--c3po is excluded as there is a bug -->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-c3p0</artifactId>
+                <version>${hibernate.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>c3p0</groupId>
+                        <artifactId>c3p0</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- see the links below for more info why it is used http://stackoverflow.com/questions/14771399/hibernate-4-calls-setbinarystream-that-is-not-supported-in-c3p0 
+                Bug report https://hibernate.atlassian.net/browse/HHH-7801 -->
+            <dependency>
+                <groupId>com.mchange</groupId>
+                <artifactId>c3p0</artifactId>
+                <version>0.9.2.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-ehcache</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+
+            <!-- Ehcache JGroups dependencies -->
+            <dependency>
+                <groupId>net.sf.ehcache</groupId>
+                <artifactId>ehcache-jgroupsreplication</artifactId>
+                <!-- >=v1.5 depends on EHCache >=v2.5. v2.5 of EHCache introduced restrictions on Cache name which actually 
+                    causes problem with the hibernate-ehcache implementation. So, v1.4 is the max that we can go. -->
+                <version>1.4</version>
+            </dependency>
+
+            <!-- Database driver dependencies -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.27</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.oracle</groupId>
+                <artifactId>ojdbc6</artifactId>
+                <version>11.2.0.3</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>2.2.9</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!--junit dependency -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.10</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>1.9.5</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!--Jersey Test Framework Starts -->
+            <dependency>
+                <groupId>com.sun.jersey.jersey-test-framework</groupId>
+                <artifactId>jersey-test-framework-core</artifactId>
+                <version>${apache.jersey.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey.jersey-test-framework</groupId>
+                <artifactId>jersey-test-framework-external</artifactId>
+                <version>${apache.jersey.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey.jersey-test-framework</groupId>
+                <artifactId>jersey-test-framework-http</artifactId>
+                <version>${apache.jersey.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!--Apache Httpcleint to send request to varnish -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.3.1</version>
+            </dependency>
+
+            <!-- SLF4J dependencies -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <!-- Google Guava depenedency -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>14.0.1</version>
+            </dependency>
+
+            <!--Dependency for atom feed -->
+            <dependency>
+                <groupId>rome</groupId>
+                <artifactId>rome</artifactId>
+                <version>1.0</version>
+            </dependency>
+
+            <!--Google Guice extension for Quartz Scheduler -->
+            <dependency>
+                <groupId>org.99soft.guice</groupId>
+                <artifactId>guartz</artifactId>
+                <version>1.3</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>c3p0</artifactId>
+                        <groupId>c3p0</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>2.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.enunciate</groupId>
+                <artifactId>enunciate-core-annotations</artifactId>
+                <version>${enunciate.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>servlet-api</artifactId>
+                        <groupId>javax.servlet</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>net.bull.javamelody</groupId>
+                <artifactId>javamelody-core</artifactId>
+                <version>1.47.0</version>
+            </dependency>
+
+            <!-- XStream is used by JavaMelody to give JSON/XML reports. -->
+            <dependency>
+                <groupId>com.thoughtworks.xstream</groupId>
+                <artifactId>xstream</artifactId>
+                <version>1.4.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.sonatype.sisu.inject</groupId>
+                <artifactId>guice-struts2</artifactId>
+                <version>${sisu.guice.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.struts</groupId>
+                        <artifactId>struts2-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-struts2</artifactId>
+                <version>3.0</version>
+                <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.inject</groupId>
+                        <artifactId>guice</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.struts</groupId>
+                        <artifactId>struts2-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.struts</groupId>
+                <artifactId>struts2-core</artifactId>
+                <version>${apache.struts2.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javassist</groupId>
+                        <artifactId>javassist</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!--tiles integration -->
+            <dependency>
+                <groupId>org.apache.struts</groupId>
+                <artifactId>struts2-tiles-plugin</artifactId>
+                <version>${apache.struts2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jgeppert.struts2.bootstrap</groupId>
+                <artifactId>struts2-bootstrap-plugin</artifactId>
+                <version>1.6.1</version>
+            </dependency>
+
+            <!--apache shiro dependencies -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-core</artifactId>
+                <version>${apache.shiro.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-web</artifactId>
+                <version>${apache.shiro.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-guice</artifactId>
+                <version>${apache.shiro.version}</version>
+            </dependency>
+
+            <!-- Jetty Dependencies -->
+            <dependency>
+                <groupId>org.eclipse.jetty.aggregate</groupId>
+                <artifactId>jetty-all-server</artifactId>
+                <version>${jetty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-webapp</artifactId>
+                <version>${jetty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jsp-2.1-glassfish</artifactId>
+                <version>2.1.v20100127</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-setuid-java</artifactId>
+                <version>${jetty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.2.4</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <!-- Local Repo on partha@cefalo.no Dropbox account for the CCI artifacts. -->
+        <repository>
+            <id>partha-dropbox-repo</id>
+            <name>Partha's Dropbox Repo</name>
+            <url>https://dl.dropboxusercontent.com/u/65110716/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.8</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.4.2</version>
+                    <configuration>
+                        <preparationGoals>clean install</preparationGoals>
+                        <remoteTagging>true</remoteTagging>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <localCheckout>true</localCheckout>
+                        <tagNameFormat>v@{project.version}</tagNameFormat>
+                        <resume>false</resume>
+                        <!-- We have nowhere to deploy now. So, overriding the default "deploy" goal with "package" -->
+                        <goals>package</goals>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>pl.project13.maven</groupId>
+                    <artifactId>git-commit-id-plugin</artifactId>
+                    <version>2.1.7</version>
+                    <configuration>
+                        <dateFormat>dd.MM.yyyy '@' HH:mm:ss Z</dateFormat>
+                        <gitDescribe>
+                            <always>false</always>
+                            <abbrev>7</abbrev>
+                            <dirty>-devel</dirty>
+                        </gitDescribe>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.3</version>
+                    <configuration>
+                        <reportPlugins>
+                            <plugin>
+                                <groupId>org.codehaus.mojo</groupId>
+                                <artifactId>findbugs-maven-plugin</artifactId>
+                                <version>2.5.3</version>
+                                <configuration>
+                                    <effort>Max</effort>
+                                    <threshold>Default</threshold>
+                                    <maxRank>20</maxRank>
+                                    <includeTests>true</includeTests>
+                                </configuration>
+                            </plugin>
+
+                            <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-project-info-reports-plugin</artifactId>
+                                <version>2.7</version>
+                                <reportSets>
+                                    <reportSet>
+                                        <reports>
+                                            <report>index</report>
+                                            <report>dependencies</report>
+                                            <report>license</report>
+                                            <report>project-team</report>
+                                            <report>mailing-list</report>
+                                            <report>cim</report>
+                                            <report>issue-tracking</report>
+                                            <report>scm</report>
+                                            <report>plugins</report>
+                                        </reports>
+                                    </reportSet>
+                                </reportSets>
+                                <configuration>
+                                    <!-- This makes the report so (oh so) much faster. -->
+                                    <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                                </configuration>
+                            </plugin>
+                        </reportPlugins>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.enunciate</groupId>
+                    <artifactId>maven-enunciate-plugin</artifactId>
+                    <version>${enunciate.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>${jetty.version}</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.16</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
